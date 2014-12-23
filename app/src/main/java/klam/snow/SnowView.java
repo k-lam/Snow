@@ -19,6 +19,7 @@ public class SnowView extends View {
 
     AnimatorSet animatorSet;
     SnowGenerator mGenerator;
+    //AnimatorCollection mAc = null;
     public SnowView(Context context) {
         super(context);
     }
@@ -38,12 +39,17 @@ public class SnowView extends View {
 //        setY(y);
 //        this.mGenerator = generator;
 //    }
-
-    public SnowView(Context context,int rId,SnowGenerator generator){
+    float mfx,mfy;
+    public SnowView(Context context,int rId,SnowGenerator generator,float x,float y){
         this(context);
         this.mGenerator = generator;
         setBitmap(rId);
-
+        setX(x);
+        setY(y);
+        this.mfx = x;
+        this.mfy = y;
+       // Log.i("snow1",x + "," + y);
+        setAlpha(0);
     }
     Bitmap bitmap;
     int mRid;
@@ -61,16 +67,21 @@ public class SnowView extends View {
         //Log.i("snow1","bitmap size:" + bitmap.getWidth() + "," + bitmap.getHeight());
     }
 
+
+
     public void start(int delay){
         if(animatorSet == null){
-            animatorSet = new AnimatorSet();
+            int rl = mGenerator.rect.right - mGenerator.rect.left;
+            int ld = (int)(rl - mfx) > 0 ? (int)(rl - mfx) : 0;
+            int duration = (int) (5000 * ((mGenerator.distance - mfy) / mGenerator.distance));
+            animatorSet = new AnimatorCollection(this).pickOne(mGenerator.distance - this.getY() - getHeight(),5000,1,2,4,ld/3,duration);
             //animatorSet.setDuration(5000);
-            animatorSet.play(AnimatorCollection.FloatDown.get(this,mGenerator.distance - this.getY() + SnowGenerator.random(-200,200),5000));
+            //animatorSet.play(AnimatorCollection.FloatDown.get(this,mGenerator.distance - this.getY() + SnowGenerator.random(-200,200),5000));
             animatorSet.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     mGenerator.mLayout.addView(SnowView.this);
-                    //Log.i("snow1","hw:" + SnowView.this.getWidth() + "," + SnowView.this.getHeight());
+                    //Log.i("snow1","onAnimationStart:" + SnowView.this.getAlpha());
                 }
 
                 @Override
@@ -91,10 +102,11 @@ public class SnowView extends View {
                 }
             });
         }
-        AnimatorCollection.FloatDown.restore(this);
-        animatorSet.setStartDelay(delay);
+       // AnimatorCollection.FloatDown.restore(this);
+       // animatorSet.setStartDelay(delay);
+        restore();
         animatorSet.start();
-        setVisibility(VISIBLE);
+        //setVisibility(VISIBLE);
     }
 
 
@@ -105,5 +117,12 @@ public class SnowView extends View {
     public void melt(){
         animatorSet.cancel();
         setVisibility(GONE);
+    }
+
+    public void restore(){
+        setX(mfx); setY(mfy);
+        setRotation(0); setRotationX(0); setRotationY(0);
+        //setAlpha(1.0f);
+        setAlpha(0);
     }
 }

@@ -34,9 +34,9 @@ public class SnowGenerator {
 
     Queue<SnowView> generate(){
         for(int i = 0;i <= initCount;i++){
-            SnowView view = new SnowView(mContext,generateRid(),this);
+            SnowView view = new SnowView(mContext,generateRid(),this,random(rect.left,rect.right),random(rect.top,rect.bottom));
             view.setBitmap(generateRid());
-            setPosition(view);
+            //setPosition(view);
             queue_ready.add(view);
         }
         return queue_ready;
@@ -71,12 +71,13 @@ public class SnowGenerator {
         int y = random(rect.top,rect.bottom);
         view.setX(x);   view.setY(y);
     }
-    int[] rids = new int[]{R.drawable.img_m_welcome_snow_0,
-            R.drawable.img_m_welcome_snow_1,
-            R.drawable.img_m_welcome_snow_2,
-            R.drawable.img_m_welcome_snow_3,
-            R.drawable.img_m_welcome_snow_4,
-            R.drawable.img_m_welcome_snow_5};
+    int[] rids = new int[]{R.drawable.s1,R.drawable.s2,R.drawable.s3,
+            R.drawable.ss1,R.drawable.ss2,R.drawable.ss3,
+            R.drawable.sss1,R.drawable.sss2,R.drawable.sss3,
+            R.drawable.ssss1,R.drawable.ssss2,R.drawable.ssss3,
+            R.drawable.sssss1,R.drawable.sssss2,R.drawable.sssss3,
+            R.drawable.ssssss1,R.drawable.ssssss2,R.drawable.ssssss3,
+    };
     int generateRid(){
         int index = random(0,rids.length - 1);
         return rids[index];
