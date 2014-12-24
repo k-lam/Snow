@@ -46,7 +46,7 @@ public class SnowView2 extends View{
 //        setBitmap(generateRid());
 //    }
 
-    final static int FULLTIME = 25000;
+    static int FULLTIME = 25000;
     float xPart,yPart,zPart;
     int mainDuration;//用时间去控制速度,出现位置是限制条件，不是决定条件。
     int initX,initY;
@@ -87,6 +87,7 @@ public class SnowView2 extends View{
         int rpadding = dip2px(50);
         int roffset = (rect.bottom - rect.top) / 5;
         mMidRect = new Rect(rect.left+rpadding,roffset,rect.right - rpadding,rect.bottom - roffset);
+        FULLTIME *= (px2dip(displayHeight)  / 332);
         reInit();
     }
 
@@ -507,6 +508,11 @@ public class SnowView2 extends View{
 
     public int dip2px( float dipValue){
         final float scale = getResources().getDisplayMetrics().density;
-        return(int)(dipValue * scale + 0.5f);
+        return (int)(dipValue * scale + 0.5f);
+    }
+
+    public int px2dip(float px){
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int)(px / scale + 0.5f);
     }
 }
